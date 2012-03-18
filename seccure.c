@@ -17,14 +17,14 @@
  *  02111-1307 USA
  */
 
-/* 
+/*
  *   SECCURE Elliptic Curve Crypto Utility for Reliable Encryption
  *
  *              http://point-at-infinity.org/seccure/
  *
  *
- * seccure implements a selection of asymmetric algorithms based on  
- * elliptic curve cryptography (ECC). See the manpage or the project's  
+ * seccure implements a selection of asymmetric algorithms based on
+ * elliptic curve cryptography (ECC). See the manpage or the project's
  * homepage for further details.
  *
  * This code links against the GNU gcrypt library "libgcrypt" (which
@@ -55,8 +55,8 @@
 #define VERSION "0.4"
 
 #define COPYBUF_SIZE (1 << 20)
-#define DEFAULT_CURVE "p160"
-#define DEFAULT_MAC_LEN 10
+#define DEFAULT_CURVE "p521"
+#define DEFAULT_MAC_LEN 32
 
 int opt_help = 0;
 int opt_verbose = 0;
@@ -236,7 +236,7 @@ void do_read_passphrase(char *hash, const struct termios *err_tios)
       tcsetattr(opt_fdpw, TCSANOW, err_tios);
     fatal_gcrypt("Cannot initialize SHA256", err);
   }
-  
+
   while (((r = read(opt_fdpw, &ch, 1)) > 0) && (ch != '\n'))
     if (ch != '\r')
       gcry_md_putc(mh, ch);
@@ -246,7 +246,7 @@ void do_read_passphrase(char *hash, const struct termios *err_tios)
       tcsetattr(opt_fdpw, TCSANOW, err_tios);
     fatal_errno("Cannot read text line", err);
   }
-  
+
   gcry_md_final(mh);
   md = (char*)gcry_md_read(mh, 0);
   memcpy(hash, md, 32);
@@ -317,9 +317,9 @@ void app_print_public_key(void)
 
     if (opt_verbose) {
       print_quiet("VERSION: ", 0);
-      fprintf(stderr, VERSION "\n"); 
-      print_quiet("CURVE: ", 0); 
-      fprintf(stderr, "%s\n", cp->name); 
+      fprintf(stderr, VERSION "\n");
+      print_quiet("CURVE: ", 0);
+      fprintf(stderr, "%s\n", cp->name);
     }
 
     if (! (privkey = gcry_malloc_secure(32)))
@@ -362,16 +362,16 @@ void app_encrypt(const char *pubkey)
 
   if (opt_verbose) {
     print_quiet("VERSION: ", 0);
-    fprintf(stderr, VERSION "\n"); 
-    print_quiet("CURVE: ", 0); 
-    fprintf(stderr, "%s\n", cp->name); 
-    print_quiet("MACLEN: ", 0); 
-    fprintf(stderr, "%d\n", 8 * opt_maclen); 
+    fprintf(stderr, VERSION "\n");
+    print_quiet("CURVE: ", 0);
+    fprintf(stderr, "%s\n", cp->name);
+    print_quiet("MACLEN: ", 0);
+    fprintf(stderr, "%d\n", 8 * opt_maclen);
   }
 
   if (strlen(pubkey) != cp->pk_len_compact)
     fatal("Invalid encryption key (wrong length)");
-    
+
   if (decompress_from_string(&P, pubkey, DF_COMPACT, cp)) {
     char rbuf[cp->pk_len_bin];
     struct aes256ctr *ac;
@@ -387,7 +387,7 @@ void app_encrypt(const char *pubkey)
 
     if (opt_verbose) {
       int i;
-      print_quiet("K_ENC: ", 0); 
+      print_quiet("K_ENC: ", 0);
       for(i = 0; i < 32; i++)
 	fprintf(stderr, "%02x", (unsigned char)keybuf[i]);
       fprintf(stderr, "\n");
@@ -417,12 +417,12 @@ void app_encrypt(const char *pubkey)
 
       if (opt_verbose) {
 	int i;
-	print_quiet("HMAC: ", 0); 
+	print_quiet("HMAC: ", 0);
 	for(i = 0; i < opt_maclen; i++)
 	  fprintf(stderr, "%02x", (unsigned char)md[i]);
 	fprintf(stderr, "\n");
       }
-      
+
       write_block(opt_fdout, md, opt_maclen);
       gcry_md_close(mh);
     }
@@ -458,10 +458,10 @@ int app_decrypt(void)
 
     if (opt_verbose) {
       print_quiet("VERSION: ", 0);
-      fprintf(stderr, VERSION "\n"); 
-      print_quiet("CURVE: ", 0); 
-      fprintf(stderr, "%s\n", cp->name); 
-      print_quiet("MACLEN: ", 0); 
+      fprintf(stderr, VERSION "\n");
+      print_quiet("CURVE: ", 0);
+      fprintf(stderr, "%s\n", cp->name);
+      print_quiet("MACLEN: ", 0);
       fprintf(stderr, "%d\n", 8 * opt_maclen);
     }
 
@@ -482,11 +482,11 @@ int app_decrypt(void)
 
 	  if (opt_verbose) {
 	    int i;
-	    print_quiet("K_ENC: ", 0); 
+	    print_quiet("K_ENC: ", 0);
 	    for(i = 0; i < 32; i++)
 	      fprintf(stderr, "%02x", (unsigned char)keybuf[i]);
 	    fprintf(stderr, "\n");
-	    print_quiet("K_MAC: ", 0); 
+	    print_quiet("K_MAC: ", 0);
 	    for(i = 32; i < 64; i++)
 	      fprintf(stderr, "%02x", (unsigned char)keybuf[i]);
 	    fprintf(stderr, "\n");
@@ -497,8 +497,8 @@ int app_decrypt(void)
 	  if (opt_maclen && ! hmacsha256_init(&mh, keybuf + 32, HMAC_KEY_SIZE))
 	    fatal("Cannot initialize HMAC-SHA256");
 	  memset(keybuf, 0x00, 64);
-	
-	  decryption_loop(opt_fdin, opt_fdout, ac, opt_maclen ? &mh : NULL, 
+
+	  decryption_loop(opt_fdin, opt_fdout, ac, opt_maclen ? &mh : NULL,
 			  NULL, mdbuf, opt_maclen);
 
 	  aes256ctr_done(ac);
@@ -509,16 +509,16 @@ int app_decrypt(void)
 
 	    if (opt_verbose) {
 	      int i;
-	      print_quiet("HMAC1: ", 0); 
+	      print_quiet("HMAC1: ", 0);
 	      for(i = 0; i < opt_maclen; i++)
 		fprintf(stderr, "%02x", (unsigned char)md[i]);
 	      fprintf(stderr, "\n");
-	      print_quiet("HMAC2: ", 0); 
+	      print_quiet("HMAC2: ", 0);
 	      for(i = 0; i < opt_maclen; i++)
 		fprintf(stderr, "%02x", (unsigned char)mdbuf[i]);
 	      fprintf(stderr, "\n");
 	    }
-	  
+
 	    if ((res = ! memcmp(mdbuf, md, opt_maclen)))
 	      print_quiet("Integrity check successful, message unforged!\n", 0);
 	    else
@@ -540,7 +540,7 @@ int app_decrypt(void)
       else
 	print_quiet("Abort: Inconsistent header.\n", 1);
     }
-    else 
+    else
       print_quiet("Abort: Inconsistent header (too short).\n", 1);
 
     gcry_mpi_release(d);
@@ -575,9 +575,9 @@ void app_sign(void)
 
     if (opt_verbose) {
       print_quiet("VERSION: ", 0);
-      fprintf(stderr, VERSION "\n"); 
-      print_quiet("CURVE: ", 0); 
-      fprintf(stderr, "%s\n", cp->name); 
+      fprintf(stderr, VERSION "\n");
+      print_quiet("CURVE: ", 0);
+      fprintf(stderr, "%s\n", cp->name);
     }
 
     if (! (privkey = gcry_malloc_secure(32)))
@@ -600,7 +600,7 @@ void app_sign(void)
 
     if (opt_verbose) {
       int i;
-      print_quiet("SHA512: ", 0); 
+      print_quiet("SHA512: ", 0);
       for(i = 0; i < 64; i++)
 	fprintf(stderr, "%02x", (unsigned char)md[i]);
       fprintf(stderr, "\n");
@@ -642,7 +642,7 @@ void app_sign(void)
 
     if (opt_sigfile && fclose(sigfile))
       fatal_errno("Cannot close signature file", errno);
-    
+
     gcry_mpi_release(sig);
     curve_release(cp);
   }
@@ -665,7 +665,7 @@ int app_verify(const char *pubkey, const char *sig)
 
   if (sig && opt_sigbin)
     fatal("Binary signature is not accepted here");
-  
+
   if (opt_curve) {
     if (! (cp = curve_by_name(opt_curve)))
       fatal("Invalid curve name");
@@ -673,27 +673,27 @@ int app_verify(const char *pubkey, const char *sig)
   else
     if (! (cp = curve_by_pk_len_compact(strlen(pubkey))))
       fatal("Invalid verification key (wrong length)");
-  
+
   if (opt_verbose) {
     print_quiet("VERSION: ", 0);
-    fprintf(stderr, VERSION "\n"); 
+    fprintf(stderr, VERSION "\n");
     print_quiet("CURVE: ", 0);
-    fprintf(stderr, "%s\n", cp->name); 
+    fprintf(stderr, "%s\n", cp->name);
   }
-  
+
   if (strlen(pubkey) != cp->pk_len_compact)
     fatal("Invalid verification key (wrong length)");
-  
+
   if (decompress_from_string(&Q, pubkey, DF_COMPACT, cp)) {
     union {
       char compact[cp->sig_len_compact + 2];
       char bin[cp->sig_len_bin];
     } sigbuf;
-    
+
     err = gcry_md_open(&mh, GCRY_MD_SHA512, 0);
     if (gcry_err_code(err))
       fatal_gcrypt("Cannot initialize SHA512", err);
-    
+
     if (opt_sigfile) {
       FILE *sigfile;
       if (! (sigfile = fopen(opt_sigfile, "r")))
@@ -712,12 +712,12 @@ int app_verify(const char *pubkey, const char *sig)
       }
       else {
 	sigbuf.compact[0] = 0;
-	if (! fgets(sigbuf.compact, cp->sig_len_compact + 2, sigfile) && 
+	if (! fgets(sigbuf.compact, cp->sig_len_compact + 2, sigfile) &&
 	    ferror(sigfile))
 	  fatal_errno("Cannot read signature", errno);
 	sigbuf.compact[strcspn(sigbuf.compact, " \r\n")] = '\0';
       }
-      
+
       if (fclose(sigfile))
 	fatal_errno("Cannot close signature file", errno);
     }
@@ -727,7 +727,7 @@ int app_verify(const char *pubkey, const char *sig)
 
     if (opt_sigappend) {
       if (opt_sigbin)
-	verisign_loop(opt_fdin, opt_fdout, &mh, sigbuf.bin, 
+	verisign_loop(opt_fdin, opt_fdout, &mh, sigbuf.bin,
 		      cp->sig_len_bin, opt_sigcopy);
       else {
 	verisign_loop(opt_fdin, opt_fdout, &mh, sigbuf.compact,
@@ -748,7 +748,7 @@ int app_verify(const char *pubkey, const char *sig)
 	fprintf(stderr, "%02x", (unsigned char)md[i]);
       fprintf(stderr, "\n");
     }
-	
+
     if (! opt_sigbin) {
       if (! sig)
 	sig = sigbuf.compact;
@@ -759,7 +759,7 @@ int app_verify(const char *pubkey, const char *sig)
       else
 	if (! deserialize_mpi(&s, DF_COMPACT, sig, cp->sig_len_compact)) {
 	  print_quiet("Invalid signature (inconsistent structure)!\n", 1);
-	  goto error; 
+	  goto error;
 	}
     }
     else
@@ -805,11 +805,11 @@ void app_signcrypt(const char *pubkey)
 
   if (opt_verbose) {
     print_quiet("VERSION: ", 0);
-    fprintf(stderr, VERSION "\n"); 
-    print_quiet("SIGNATURE CURVE: ", 0); 
-    fprintf(stderr, "%s\n", cp_sig->name); 
-    print_quiet("ENCRYPTION CURVE: ", 0); 
-    fprintf(stderr, "%s\n", cp_enc->name); 
+    fprintf(stderr, VERSION "\n");
+    print_quiet("SIGNATURE CURVE: ", 0);
+    fprintf(stderr, "%s\n", cp_sig->name);
+    print_quiet("ENCRYPTION CURVE: ", 0);
+    fprintf(stderr, "%s\n", cp_enc->name);
   }
 
   if (strlen(pubkey) != cp_enc->pk_len_compact)
@@ -839,7 +839,7 @@ void app_signcrypt(const char *pubkey)
 
     if (opt_verbose) {
       int i;
-      print_quiet("K_ENC: ", 0); 
+      print_quiet("K_ENC: ", 0);
       for(i = 0; i < 32; i++)
 	fprintf(stderr, "%02x", (unsigned char)keybuf[i]);
       fprintf(stderr, "\n");
@@ -864,7 +864,7 @@ void app_signcrypt(const char *pubkey)
 
     if (opt_verbose) {
       int i;
-      print_quiet("SHA512: ", 0); 
+      print_quiet("SHA512: ", 0);
       for(i = 0; i < 64; i++)
 	fprintf(stderr, "%02x", (unsigned char)md[i]);
       fprintf(stderr, "\n");
@@ -911,13 +911,13 @@ int app_veridec(const char *pubkey)
 
   if (opt_verbose) {
     print_quiet("VERSION: ", 0);
-    fprintf(stderr, VERSION "\n"); 
-    print_quiet("SIGNATURE CURVE: ", 0); 
-    fprintf(stderr, "%s\n", cp_sig->name); 
-    print_quiet("ENCRYPTION CURVE: ", 0); 
-    fprintf(stderr, "%s\n", cp_enc->name); 
+    fprintf(stderr, VERSION "\n");
+    print_quiet("SIGNATURE CURVE: ", 0);
+    fprintf(stderr, "%s\n", cp_sig->name);
+    print_quiet("ENCRYPTION CURVE: ", 0);
+    fprintf(stderr, "%s\n", cp_enc->name);
   }
-  
+
   if (strlen(pubkey) != cp_sig->pk_len_compact)
     fatal("Invalid verification key (wrong length)");
 
@@ -929,16 +929,16 @@ int app_veridec(const char *pubkey)
     struct aes256ctr *ac;
     gcry_md_hd_t mh;
     gcry_error_t err;
-    
+
     if (! (privkey = gcry_malloc_secure(32)))
       fatal("Out of secure memory");
     read_passphrase(privkey, "private decryption key");
     d = hash_to_exponent(privkey, cp_enc);
     gcry_free(privkey);
-    
+
     if (isatty(opt_fdin))
       print_quiet("Go ahead and enter the ciphertext ...\n", 0);
-    
+
     if (read_block(opt_fdin, rbuf, cp_enc->pk_len_bin)) {
       if (decompress_from_string(&R, rbuf, DF_BIN, cp_enc)) {
 
@@ -948,7 +948,7 @@ int app_veridec(const char *pubkey)
 	if (ECIES_decryption(keybuf, &R, d, cp_enc)) {
 	  if (opt_verbose) {
 	    int i;
-	    print_quiet("K_ENC: ", 0); 
+	    print_quiet("K_ENC: ", 0);
 	    for(i = 0; i < 32; i++)
 	      fprintf(stderr, "%02x", (unsigned char)keybuf[i]);
 	    fprintf(stderr, "\n");
@@ -967,10 +967,10 @@ int app_veridec(const char *pubkey)
 
 	  gcry_md_final(mh);
 	  md = (char*)gcry_md_read(mh, 0);
-	    
+
 	  if (opt_verbose) {
 	    int i;
-	    print_quiet("SHA512: ", 0); 
+	    print_quiet("SHA512: ", 0);
 	    for(i = 0; i < 64; i++)
 	      fprintf(stderr, "%02x", (unsigned char)md[i]);
 	    fprintf(stderr, "\n");
@@ -997,15 +997,15 @@ int app_veridec(const char *pubkey)
       else
 	print_quiet("Abort: Inconsistent header.\n", 1);
     }
-    else 
+    else
       print_quiet("Abort: Inconsistent header (too short).\n", 1);
 
     gcry_mpi_release(d);
     point_release(&Q);
-  }  
+  }
   else
     fatal("Invalid verification key");
-    
+
   curve_release(cp_enc);
   curve_release(cp_sig);
   return ! res;
@@ -1029,11 +1029,11 @@ void app_dh(void)
 
     if (opt_verbose) {
       print_quiet("VERSION: ", 0);
-      fprintf(stderr, VERSION "\n"); 
-      print_quiet("CURVE: ", 0); 
-      fprintf(stderr, "%s\n", cp->name); 
+      fprintf(stderr, VERSION "\n");
+      print_quiet("CURVE: ", 0);
+      fprintf(stderr, "%s\n", cp->name);
     }
-    
+
     exp = DH_step1(&A, cp);
     compress_to_string(keyA, DF_COMPACT, &A, cp);
     point_release(&A);
@@ -1047,8 +1047,10 @@ void app_dh(void)
       fatal_errno("Cannot read text line", errno);
     keyB[strcspn(keyB, "\r\n")] = 0;
 
-    if (strlen(keyB) != cp->pk_len_compact)
-      fatal("Invalid key (wrong length)");
+    if (strlen(keyB) != cp->pk_len_compact) {
+      print_quiet("Invalid key (wrong length)\n", 0);
+      return;
+    }
 
     if (decompress_from_string(&B, keyB, DF_COMPACT, cp)) {
 
@@ -1060,11 +1062,11 @@ void app_dh(void)
 
 	if (opt_verbose) {
 	  int i;
-	  print_quiet("K_ESTABLISHED: ", 0); 
+	  print_quiet("K_ESTABLISHED: ", 0);
 	  for(i = 0; i < cp->dh_len_bin; i++)
 	    fprintf(stderr, "%02x", (unsigned char)keybuf[i]);
 	  fprintf(stderr, "\n");
-	  print_quiet("K_VERIFICATION: ", 0); 
+	  print_quiet("K_VERIFICATION: ", 0);
 	  for(i = 0; i < cp->dh_len_bin; i++)
 	    fprintf(stderr, "%02x", (unsigned char)keybuf[32 + i]);
 	  fprintf(stderr, "\n");
@@ -1114,7 +1116,7 @@ void app_dh(void)
 int main(int argc, char **argv)
 {
   gcry_error_t err;
-  char *progname;
+  char *action = NULL;
   int res = 0, i;
 
   assert(gcry_check_version("1.4.1"));
@@ -1130,10 +1132,7 @@ int main(int argc, char **argv)
 
   if (getuid() != geteuid())
     seteuid(getuid());
-  
-  if ((progname = strrchr(argv[0], '/')) == NULL)
-    progname = argv[0];
-  
+
   while((i = getopt(argc, argv, "fbadm:i:o:F:s:c:hvq")) != -1)
     switch(i) {
     case 'f': opt_sigcopy = 1; break;
@@ -1141,7 +1140,7 @@ int main(int argc, char **argv)
     case 'a': opt_sigappend = 1; break;
     case 'd': opt_dblprompt = 1; break;
     case 'm':
-      opt_maclen = atoi(optarg); 
+      opt_maclen = atoi(optarg);
       if (opt_maclen < 0 || opt_maclen > 256 || opt_maclen % 8)
 	fatal("Invalid MAC length");
       opt_maclen /= 8;
@@ -1150,9 +1149,9 @@ int main(int argc, char **argv)
     case 'o': opt_outfile = optarg; break;
     case 'F': opt_pwfile = optarg; break;
     case 's': opt_sigfile = optarg; break;
-    case 'c': 
+    case 'c':
       if (! opt_curve)
-	opt_curve = optarg; 
+	opt_curve = optarg;
       else
 	opt_curve2 = optarg;
       break;
@@ -1168,8 +1167,8 @@ int main(int argc, char **argv)
       fatal_errno("Cannot open input file", errno);
 
   if (opt_outfile) {
-    int decmode = strstr(progname, "decrypt") || strstr(progname, "veridec");
-    if ((opt_fdout = open(opt_outfile, O_WRONLY | O_CREAT | O_TRUNC, 
+    int decmode = strstr(action, "decrypt") || strstr(action, "veridec");
+    if ((opt_fdout = open(opt_outfile, O_WRONLY | O_CREAT | O_TRUNC,
 			  decmode ? 0600 : 0644)) < 0)
       fatal_errno("Cannot open output file", errno);
   }
@@ -1183,78 +1182,93 @@ int main(int argc, char **argv)
       if ((opt_fdpw = open("/dev/tty", O_RDONLY)) < 0)
 	fatal_errno("Cannot open tty", errno);
 
-  if (strstr(progname, "key")) {
+  if(optind >= argc) {
+      fatal_errno("Command required!", 666);
+  }
+  action = argv[optind++];
+
+  if (!strcmp(action, "key")) {
     if (opt_help || optind != argc)
       puts("Generate public key from private key (seccure version " VERSION ").\n"
 	   "\n"
-	   "seccure-key [-c curve] [-F pwfile] [-d]");
+	   "seccure key [-c curve] [-F pwfile] [-d]");
     else
       app_print_public_key();
   }
-  else if (strstr(progname, "encrypt")) {
+  else if (!strcmp(action, "encrypt")) {
     if (opt_help || optind != argc - 1)
       puts("Encrypt a message with a public key (seccure version" VERSION ").\n"
 	   "\n"
-	   "seccure-encrypt [-m maclen] [-c curve] [-i infile] [-o outfile] key");
+	   "seccure encrypt [-m maclen] [-c curve] [-i infile] [-o outfile] key");
     else
       app_encrypt(argv[optind]);
   }
-  else if (strstr(progname, "decrypt")) {
+  else if (!strcmp(action, "decrypt")) {
     if (opt_help || optind != argc)
       puts("Decrypt a message using a secret key (seccure version " VERSION ").\n"
 	   "\n"
-	   "seccure-decrypt [-m maclen] [-c curve] [-i infile] [-o outfile]\n"
+	   "seccure decrypt [-m maclen] [-c curve] [-i infile] [-o outfile]\n"
 	   "                [-F pwfile] [-d]");
     else
       res = app_decrypt();
   }
-  else if (strstr(progname, "signcrypt")) {
+  else if (!strcmp(action, "signcrypt")) {
     if (opt_help || optind != argc - 1)
       puts("Signcrypt a message (seccure version " VERSION ").\n"
 	   "\n"
-	   "seccure-signcrypt [-c sig_curve [-c enc_curve]] [-i infile] [-o outfile]\n" 
+	   "seccure signcrypt [-c sig_curve [-c enc_curve]] [-i infile] [-o outfile]\n"
 	   "                  [-F pwfile] [-d] key");
     else
       app_signcrypt(argv[optind]);
   }
-  else if (strstr(progname, "veridec")) {
+  else if (!strcmp(action, "veridec")) {
     if (opt_help || optind != argc - 1)
       puts("Decrypt and verify a signcrypted message (seccure version " VERSION ").\n"
 	   "\n"
-	   "seccure-veridec [-c enc_curve [-c sig_curve]] [-i infile] [-o outfile]\n" 
+	   "seccure veridec [-c enc_curve [-c sig_curve]] [-i infile] [-o outfile]\n"
 	   "                [-F pwfile] [-d] key");
     else
       res = app_veridec(argv[optind]);
   }
-  else if (strstr(progname, "sign")) {
+  else if (!strcmp(action, "sign")) {
     if (opt_help || optind != argc)
       puts("Generate a signature (seccure version " VERSION ").\n"
 	   "\n"
-	   "seccure-sign [-f] [-b] [-a] [-c curve] [-s sigfile] [-i infile]\n"
+	   "seccure sign [-f] [-b] [-a] [-c curve] [-s sigfile] [-i infile]\n"
 	   "             [-o outfile] [-F pwfile] [-d]");
     else
       app_sign();
   }
-  else if (strstr(progname, "verify")) {
+  else if (!strcmp(action, "verify")) {
     if (opt_help || (optind != argc - 2 && optind != argc - 1))
       puts("Verify the signature of a message (seccure version " VERSION ").\n"
 	   "\n"
-	   "seccure-verify [-f] [-b] [-a] [-c curve] [-s sigfile] [-i infile]\n" 
+	   "seccure verify [-f] [-b] [-a] [-c curve] [-s sigfile] [-i infile]\n"
 	   "               [-o outfile] key [signature]");
     else
       res = app_verify(argv[optind], argv[optind + 1]);
   }
-  else if (strstr(progname, "dh")) {
+  else if (!strcmp(action, "dh")) {
     if (opt_help || optind != argc)
       puts("Perform an interactive Diffie-Hellman key exchange (seccure version " VERSION ").\n"
 	   "\n"
-	   "seccure-dh [-c curve]");
+	   "seccure dh [-c curve]");
     else
       app_dh();
   }
-  else 
+  else if (!strcmp(action, "dhd")) {
+    if (opt_help || optind != argc)
+      puts("Perform an interactive Diffie-Hellman key exchange (seccure version " VERSION ").\n"
+	   "\n"
+	   "seccure dhd [-c curve]");
+    else
+        while(1) {
+          app_dh();
+        }
+  }
+  else
     fatal("Unknown command");
-  
+
   if (opt_infile)
     close(opt_fdin);
   if (opt_outfile)
