@@ -1,4 +1,4 @@
-CFLAGS = -O2 -Wall # -D NOBEEP
+CFLAGS = -ggdb -O0 -Wall # -D NOBEEP
 
 default: binaries # doc
 
@@ -16,9 +16,9 @@ clean:
 rebuild: clean default
 
 seccure: seccure.o numtheory.o ecc.o serialize.o protocol.o curves.o aes256ctr.o
-	$(CC) $(CFLAGS) -o seccure -lgcrypt seccure.o numtheory.o ecc.o \
+	$(CC) $(CFLAGS) -ggdb -O0 -o seccure -lgcrypt seccure.o numtheory.o ecc.o \
 	curves.o serialize.o protocol.o aes256ctr.o
-	strip seccure
+#strip seccure
 
 seccure.o: seccure.c
 	$(CC) $(CFLAGS) -c seccure.c

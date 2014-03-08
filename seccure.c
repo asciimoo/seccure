@@ -1162,6 +1162,11 @@ int main(int argc, char **argv)
       exit(1);
     }
 
+
+  if(optind >= argc) {
+      fatal_errno("Command required!", 666);
+  }
+  action = argv[optind++];
   if (opt_infile)
     if ((opt_fdin = open(opt_infile, O_RDONLY)) < 0)
       fatal_errno("Cannot open input file", errno);
@@ -1181,11 +1186,6 @@ int main(int argc, char **argv)
     if (! opt_infile && ! isatty(STDIN_FILENO))
       if ((opt_fdpw = open("/dev/tty", O_RDONLY)) < 0)
 	fatal_errno("Cannot open tty", errno);
-
-  if(optind >= argc) {
-      fatal_errno("Command required!", 666);
-  }
-  action = argv[optind++];
 
   if (!strcmp(action, "key")) {
     if (opt_help || optind != argc)
