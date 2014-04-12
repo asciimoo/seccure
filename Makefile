@@ -1,4 +1,4 @@
-CFLAGS = -02 -Wall # -D NOBEEP
+CFLAGS = -O2 -Wall # -D NOBEEP
 
 default: binaries # doc
 
