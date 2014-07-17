@@ -16,8 +16,8 @@ clean:
 rebuild: clean default
 
 seccure: seccure.o numtheory.o ecc.o serialize.o protocol.o curves.o aes256ctr.o
-	$(CC) $(CFLAGS) -o seccure -lgcrypt seccure.o numtheory.o ecc.o \
-	curves.o serialize.o protocol.o aes256ctr.o
+	$(CC) $(CFLAGS) -o seccure seccure.o numtheory.o ecc.o \
+	curves.o serialize.o protocol.o aes256ctr.o -lgcrypt
 	strip seccure
 
 seccure.o: seccure.c
