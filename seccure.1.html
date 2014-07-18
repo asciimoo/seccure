@@ -5,21 +5,21 @@
 
 <h2>Synopsis</h2>
 <b>
-      seccure-key [-c <em>curve</em>] [-F <em>pwfile</em>] [-d] [-v] [-q]<br>
+      seccure key [-c <em>curve</em>] [-F <em>pwfile</em>] [-d] [-v] [-q]<br>
 
-      seccure-encrypt [-m <em>maclen</em>] [-c <em>curve</em>] [-i <em>infile</em>] [-o <em>outfile</em>] [-v] [-q] <em>key</em> <br>
+      seccure encrypt [-m <em>maclen</em>] [-c <em>curve</em>] [-i <em>infile</em>] [-o <em>outfile</em>] [-v] [-q] <em>key</em> <br>
 
-      seccure-decrypt [-m <em>maclen</em>] [-c <em>curve</em>] [-i <em>infile</em>] [-o <em>outfile</em>] [-F <em>pwfile</em>] [-d] [-v] [-q] <br>
+      seccure decrypt [-m <em>maclen</em>] [-c <em>curve</em>] [-i <em>infile</em>] [-o <em>outfile</em>] [-F <em>pwfile</em>] [-d] [-v] [-q] <br>
 
-      seccure-sign [-f] [-b] [-a] [-c <em>curve</em>] [-s <em>sigfile</em>] [-i <em>infile</em>] [-o <em>outfile</em>] [-F <em>pwfile</em>] [-d] [-v] [-q] <br>
+      seccure sign [-f] [-b] [-a] [-c <em>curve</em>] [-s <em>sigfile</em>] [-i <em>infile</em>] [-o <em>outfile</em>] [-F <em>pwfile</em>] [-d] [-v] [-q] <br>
 
-      seccure-verify [-f] [-b] [-a] [-c <em>curve</em>] [-s <em>sigfile</em>] [-i <em>infile</em>] [-o <em>outfile</em>] [-v] [-q] <em>key</em> [<em>sig</em>] <br>
+      seccure verify [-f] [-b] [-a] [-c <em>curve</em>] [-s <em>sigfile</em>] [-i <em>infile</em>] [-o <em>outfile</em>] [-v] [-q] <em>key</em> [<em>sig</em>] <br>
 
-      seccure-signcrypt [-c <em>sig_curve</em> [-c <em>enc_curve</em>]] [-i <em>infile</em>] [-o <em>outfile</em>] [-F <em>pwfile</em>] [-d] [-v] [-q] <em>key</em><br>
+      seccure signcrypt [-c <em>sig_curve</em> [-c <em>enc_curve</em>]] [-i <em>infile</em>] [-o <em>outfile</em>] [-F <em>pwfile</em>] [-d] [-v] [-q] <em>key</em><br>
 
-      seccure-veridec [-c <em>enc_curve</em> [-c <em>sig_curve</em>]] [-i <em>infile</em>] [-o <em>outfile</em>] [-F <em>pwfile</em>] [-d] [-v] [-q] <em>key</em><br>
+      seccure veridec [-c <em>enc_curve</em> [-c <em>sig_curve</em>]] [-i <em>infile</em>] [-o <em>outfile</em>] [-F <em>pwfile</em>] [-d] [-v] [-q] <em>key</em><br>
 
-      seccure-dh [-c <em>curve</em>] [-v] [-q]<br>
+      seccure dh [-c <em>curve</em>] [-v] [-q]<br>
 
 </b>
 
@@ -49,31 +49,31 @@ the Web of Trust or even configuration files -- is required.
 
 <h2>Commands</h2>
 
-      <p><b>seccure-key</b>: Prompt for a passphrase and
+      <p><b>seccure key</b>: Prompt for a passphrase and
       calculate the corresponding public key.</p>
       
-      <p><b>seccure-encrypt</b>: Encrypt a message with 
+      <p><b>seccure encrypt</b>: Encrypt a message with 
       public key <em>key</em>.</p>
 
-      <p><b>seccure-decrypt</b>: Prompt for a passphrase
+      <p><b>seccure decrypt</b>: Prompt for a passphrase
       and decrypt a 
-      <b>seccure-encrypt</b>ed message.</p>
+      <b>seccure encrypt</b>ed message.</p>
 
-      <p><b>seccure-sign</b>: Prompt for a passphrase and
+      <p><b>seccure sign</b>: Prompt for a passphrase and
       digitally sign a message.</p>
 
-      <p><b>seccure-verify</b>: Verify signature <em>sig</em>
+      <p><b>seccure verify</b>: Verify signature <em>sig</em>
       with public key <em>key</em>.</p>
 
-      <p><b>seccure-signcrypt</b>: Sign a message first, encrypt
+      <p><b>seccure signcrypt</b>: Sign a message first, encrypt
       it subsequently (in <b>-b -a</b> and <b>-m 0</b> mode,
       respectively). This is basically a shortcut for two separate
       <b>seccure</b> invocations.</p>
 
-      <p><b>seccure-veridec</b>: Counterpart to signcryption.
+      <p><b>seccure veridec</b>: Counterpart to signcryption.
       </p>
 
-      <p><b>seccure-dh</b>: Perform a Diffie-Hellman key
+      <p><b>seccure dh</b>: Perform a Diffie-Hellman key
       exchange.</p>
       
 
@@ -139,10 +139,10 @@ Write to <em>outfile</em> instead of STDOUT.
       <p><b>-s <em>sigfile</em></b></p>
 
 
-      <p>For <b>seccure-sign</b>: Write signature to
+      <p>For <b>seccure sign</b>: Write signature to
 <em>sigfile</em> instead of STDERR. </p>
 
-<p>For <b>seccure-verify</b>: Read signature from
+<p>For <b>seccure verify</b>: Read signature from
 <em>sigfile</em> instead of using <em>sig</em>.
 </p>
 
@@ -164,11 +164,11 @@ Write to <em>outfile</em> instead of STDOUT.
       
       <p><b>-a</b></p>
 
-      <p>Append mode: </p> <p>For <b>seccure-sign</b>: Append
+      <p>Append mode: </p> <p>For <b>seccure sign</b>: Append
       signature to the end of the document. This enforces <b>-f</b>
       mode.</p>
 
-<p>For <b>seccure-verify</b>: Detach signature from
+<p>For <b>seccure verify</b>: Detach signature from
 the end of the document.
 </p>
 
@@ -206,28 +206,28 @@ successfully. Any error leads to a nonzero exit code.</p>
 <h2>Example</h2>
 
 <p>Given the passphrase 'seccure is secure', run</p> 
-<p><b>seccure-key</b></p> 
+<p><b>seccure key</b></p> 
 
 <p>to determine the corresponding public key (which is
 '2@DupCaCKykHBe-QHpAP%d%B[' on curve <em>p160</em>).</p>
 
 <p>To encrypt the file 'document.msg' with that key run</p>
 
-<p><b>seccure-encrypt -i document.msg -o document.enc '2@DupCaCKykHBe-QHpAP%d%B['</b></p>
+<p><b>seccure encrypt -i document.msg -o document.enc '2@DupCaCKykHBe-QHpAP%d%B['</b></p>
 
 <p>The message can be recovered with </p>
 
-<p><b>seccure-decrypt -i document.enc</b></p>
+<p><b>seccure decrypt -i document.enc</b></p>
 
 <p>To sign the file run</p>
 
-<p><b>seccure-sign -i document.msg -s document.sig</b></p>
+<p><b>seccure sign -i document.msg -s document.sig</b></p>
 
 <p>and enter the passphrase. The signature is 
 stored in 'document.sig' and can be verified with
 </p>
 
-<p><b>seccure-verify -i document.msg -s document.sig
+<p><b>seccure verify -i document.msg -s document.sig
 '2@DupCaCKykHBe-QHpAP%d%B['</b></p>
 
 
@@ -235,7 +235,7 @@ stored in 'document.sig' and can be verified with
 
 <h2>Key establishment</h2>
 
-  <b>seccure-dh</b> performs an interactive Diffie-Hellman key
+  <b>seccure dh</b> performs an interactive Diffie-Hellman key
   exchange. Two instances have to be run in parallel; the token
   generated by the first instance is the input for the second one and vice
   versa. The output consists of two shared keys: it is guaranteed that
