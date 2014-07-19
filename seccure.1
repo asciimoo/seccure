@@ -2,42 +2,42 @@
 .SH NAME
 seccure \- SECCURE Elliptic Curve Crypto Utility for Reliable Encryption
 .SH SYNOPSIS
-\fBseccure-key [-c \fIcurve\fB] [-F \fIpwfile\fB] [-d] [-v] [-q]
+\fBseccure key [-c \fIcurve\fB] [-F \fIpwfile\fB] [-d] [-v] [-q]
 
-seccure-encrypt [-m \fImaclen\fB] [-c \fIcurve\fB] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-v] [-q] \fIkey\fB
+seccure encrypt [-m \fImaclen\fB] [-c \fIcurve\fB] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-v] [-q] \fIkey\fB
 
-seccure-decrypt [-m \fImaclen\fB] [-c \fIcurve\fB] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-F \fIpwfile\fB] [-d] [-v] [-q] 
+seccure decrypt [-m \fImaclen\fB] [-c \fIcurve\fB] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-F \fIpwfile\fB] [-d] [-v] [-q] 
 
-seccure-sign [-f] [-b] [-a] [-c \fIcurve\fB] [-s \fIsigfile\fB] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-F \fIpwfile\fB] [-d] [-v] [-q] 
+seccure sign [-f] [-b] [-a] [-c \fIcurve\fB] [-s \fIsigfile\fB] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-F \fIpwfile\fB] [-d] [-v] [-q] 
 
-seccure-verify [-f] [-b] [-a] [-c \fIcurve\fB] [-s \fIsigfile\fB] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-v] [-q] \fIkey\fB [\fIsig\fB] 
+seccure verify [-f] [-b] [-a] [-c \fIcurve\fB] [-s \fIsigfile\fB] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-v] [-q] \fIkey\fB [\fIsig\fB] 
 
-seccure-signcrypt [-c \fIsig_curve\fB [-c \fIenc_curve\fB]] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-F \fIpwfile\fB] [-d] [-v] [-q] \fIkey\fB
+seccure signcrypt [-c \fIsig_curve\fB [-c \fIenc_curve\fB]] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-F \fIpwfile\fB] [-d] [-v] [-q] \fIkey\fB
 
-seccure-veridec [-c \fIenc_curve\fB [-c \fIsig_curve\fB]] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-F \fIpwfile\fB] [-d] [-v] [-q] \fIkey\fB
+seccure veridec [-c \fIenc_curve\fB [-c \fIsig_curve\fB]] [-i \fIinfile\fB] [-o \fIoutfile\fB] [-F \fIpwfile\fB] [-d] [-v] [-q] \fIkey\fB
 
-seccure-dh [-c \fIcurve\fB] [-v] [-q]
+seccure dh [-c \fIcurve\fB] [-v] [-q]
 \f1
 .SH DESCRIPTION
 The \fBseccure\f1 toolset implements a selection of asymmetric algorithms based on elliptic curve cryptography (ECC). In particular it offers public key encryption / decryption, signature generation / verification and basic key establishment. 
 
 ECC schemes offer a much better key size to security ratio than classical systems (RSA, DSA). Keys are short enough to make direct specification of keys on the command line possible (sometimes this is more convenient than the management of PGP-like key rings). \fBseccure\f1 builds on this feature and therefore is the tool of choice whenever lightweight but nevertheless strong asymmetric cryptography -- independent of key servers, revocation certificates, the Web of Trust or even configuration files -- is required. 
 .SH COMMANDS
-\fBseccure-key\f1: Prompt for a passphrase and calculate the corresponding public key.
+\fBseccure key\f1: Prompt for a passphrase and calculate the corresponding public key.
 
-\fBseccure-encrypt\f1: Encrypt a message with public key \fIkey\f1.
+\fBseccure encrypt\f1: Encrypt a message with public key \fIkey\f1.
 
-\fBseccure-decrypt\f1: Prompt for a passphrase and decrypt a \fBseccure-encrypt\f1ed message.
+\fBseccure decrypt\f1: Prompt for a passphrase and decrypt a \fBseccure encrypt\f1ed message.
 
-\fBseccure-sign\f1: Prompt for a passphrase and digitally sign a message.
+\fBseccure sign\f1: Prompt for a passphrase and digitally sign a message.
 
-\fBseccure-verify\f1: Verify signature \fIsig\f1 with public key \fIkey\f1.
+\fBseccure verify\f1: Verify signature \fIsig\f1 with public key \fIkey\f1.
 
-\fBseccure-signcrypt\f1: Sign a message first, encrypt it subsequently (in \fB-b -a\f1 and \fB-m 0\f1 mode, respectively). This is basically a shortcut for two separate \fBseccure\f1 invocations.
+\fBseccure signcrypt\f1: Sign a message first, encrypt it subsequently (in \fB-b -a\f1 and \fB-m 0\f1 mode, respectively). This is basically a shortcut for two separate \fBseccure\f1 invocations.
 
-\fBseccure-veridec\f1: Counterpart to signcryption. 
+\fBseccure veridec\f1: Counterpart to signcryption. 
 
-\fBseccure-dh\f1: Perform a Diffie-Hellman key exchange.
+\fBseccure dh\f1: Perform a Diffie-Hellman key exchange.
 .SH OPTIONS
 .TP
 \fB-c \fIcurve\fB\f1
@@ -58,9 +58,9 @@ Read from \fIinfile\f1 instead of STDIN.
 Write to \fIoutfile\f1 instead of STDOUT. 
 .TP
 \fB-s \fIsigfile\fB\f1
-For \fBseccure-sign\f1: Write signature to \fIsigfile\f1 instead of STDERR. 
+For \fBseccure sign\f1: Write signature to \fIsigfile\f1 instead of STDERR. 
 
-For \fBseccure-verify\f1: Read signature from \fIsigfile\f1 instead of using \fIsig\f1. 
+For \fBseccure verify\f1: Read signature from \fIsigfile\f1 instead of using \fIsig\f1. 
 .TP
 \fB-f\f1
 Filter mode: Copy all data read from STDIN verbatim to STDOUT (eventually attaching or detaching a signature in \fB-a\f1 mode).
@@ -71,9 +71,9 @@ Binary mode: Read/write signatures as binary strings. This leads to very compact
 \fB-a\f1
 Append mode: 
 
-For \fBseccure-sign\f1: Append signature to the end of the document. This enforces \fB-f\f1 mode.
+For \fBseccure sign\f1: Append signature to the end of the document. This enforces \fB-f\f1 mode.
 
-For \fBseccure-verify\f1: Detach signature from the end of the document. 
+For \fBseccure verify\f1: Detach signature from the end of the document. 
 .TP
 \fB-d\f1
 Double prompt mode: When reading a passphrase from the console: prompt twice and assure the phrases are the same. 
@@ -88,27 +88,27 @@ All commands in the \fBseccure\f1 software suite exit with a status of zero if t
 .SH EXAMPLE
 Given the passphrase 'seccure is secure', run
 
-\fBseccure-key\f1
+\fBseccure key\f1
 
 to determine the corresponding public key (which is '2@DupCaCKykHBe-QHpAP%d%B[' on curve \fIp160\f1).
 
 To encrypt the file 'document.msg' with that key run
 
-\fBseccure-encrypt -i document.msg -o document.enc '2@DupCaCKykHBe-QHpAP%d%B['\f1
+\fBseccure encrypt -i document.msg -o document.enc '2@DupCaCKykHBe-QHpAP%d%B['\f1
 
 The message can be recovered with 
 
-\fBseccure-decrypt -i document.enc\f1
+\fBseccure decrypt -i document.enc\f1
 
 To sign the file run
 
-\fBseccure-sign -i document.msg -s document.sig\f1
+\fBseccure sign -i document.msg -s document.sig\f1
 
 and enter the passphrase. The signature is stored in 'document.sig' and can be verified with 
 
-\fBseccure-verify -i document.msg -s document.sig '2@DupCaCKykHBe-QHpAP%d%B['\f1
+\fBseccure verify -i document.msg -s document.sig '2@DupCaCKykHBe-QHpAP%d%B['\f1
 .SH KEY ESTABLISHMENT
-\fBseccure-dh\f1 performs an interactive Diffie-Hellman key exchange. Two instances have to be run in parallel; the token generated by the first instance is the input for the second one and vice versa. The output consists of two shared keys: it is guaranteed that no attacker can ever find out the established key as soon as the two parties can confirm that both have the same verification key. The authentic comparision of the verification keys can, for example, be realized via signed messages or via telephone (using 'voice authentication'). 
+\fBseccure dh\f1 performs an interactive Diffie-Hellman key exchange. Two instances have to be run in parallel; the token generated by the first instance is the input for the second one and vice versa. The output consists of two shared keys: it is guaranteed that no attacker can ever find out the established key as soon as the two parties can confirm that both have the same verification key. The authentic comparision of the verification keys can, for example, be realized via signed messages or via telephone (using 'voice authentication'). 
 .SH HOW TO CHOOSE THE CURVE
 The number in the name of a curve measures its security level. Rule of thumb: the workload to 'break' a k-bit curve is 2^(k/2) approximately (example: it takes about 2^112 steps to break \fIsecp224r1\f1). If the 80 bit security of the default curve doesn't seem sufficient, choosing a stronger curve (\fIp192\f1 and upwards) may, of course, be considered. But the suggestion remains: \fIp160\f1 offers reasonable security for everyday use. \fBWarning:\f1 the curves \fIp112\f1 and \fIp128\f1 do not satisfy demands for long-time security. 
 .SH ALGORITHMS

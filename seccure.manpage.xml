@@ -29,14 +29,14 @@ href="http://masqmail.cx/xmltoman/xmltoman.xsl" ?>
   desc="SECCURE Elliptic Curve Crypto Utility for Reliable Encryption">
 
 <synopsis>
-      <cmd>seccure-key [-c <arg>curve</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q]</cmd>
-      <cmd>seccure-encrypt [-m <arg>maclen</arg>] [-c <arg>curve</arg>] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-v] [-q] <arg>key</arg> </cmd>
-      <cmd>seccure-decrypt [-m <arg>maclen</arg>] [-c <arg>curve</arg>] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q] </cmd>
-      <cmd>seccure-sign [-f] [-b] [-a] [-c <arg>curve</arg>] [-s <arg>sigfile</arg>] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q] </cmd>
-      <cmd>seccure-verify [-f] [-b] [-a] [-c <arg>curve</arg>] [-s <arg>sigfile</arg>] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-v] [-q] <arg>key</arg> [<arg>sig</arg>] </cmd>
-      <cmd>seccure-signcrypt [-c <arg>sig_curve</arg> [-c <arg>enc_curve</arg>]] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q] <arg>key</arg></cmd>
-      <cmd>seccure-veridec [-c <arg>enc_curve</arg> [-c <arg>sig_curve</arg>]] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q] <arg>key</arg></cmd>
-      <cmd>seccure-dh [-c <arg>curve</arg>] [-v] [-q]</cmd>
+      <cmd>seccure key [-c <arg>curve</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q]</cmd>
+      <cmd>seccure encrypt [-m <arg>maclen</arg>] [-c <arg>curve</arg>] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-v] [-q] <arg>key</arg> </cmd>
+      <cmd>seccure decrypt [-m <arg>maclen</arg>] [-c <arg>curve</arg>] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q] </cmd>
+      <cmd>seccure sign [-f] [-b] [-a] [-c <arg>curve</arg>] [-s <arg>sigfile</arg>] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q] </cmd>
+      <cmd>seccure verify [-f] [-b] [-a] [-c <arg>curve</arg>] [-s <arg>sigfile</arg>] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-v] [-q] <arg>key</arg> [<arg>sig</arg>] </cmd>
+      <cmd>seccure signcrypt [-c <arg>sig_curve</arg> [-c <arg>enc_curve</arg>]] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q] <arg>key</arg></cmd>
+      <cmd>seccure veridec [-c <arg>enc_curve</arg> [-c <arg>sig_curve</arg>]] [-i <arg>infile</arg>] [-o <arg>outfile</arg>] [-F <arg>pwfile</arg>] [-d] [-v] [-q] <arg>key</arg></cmd>
+      <cmd>seccure dh [-c <arg>curve</arg>] [-v] [-q]</cmd>
 </synopsis>
 
 <description>
@@ -61,31 +61,31 @@ the Web of Trust or even configuration files -- is required.
 </description>
 
 <section name ="Commands">
-      <p><opt>seccure-key</opt>: Prompt for a passphrase and
+      <p><opt>seccure key</opt>: Prompt for a passphrase and
       calculate the corresponding public key.</p>
       
-      <p><opt>seccure-encrypt</opt>: Encrypt a message with 
+      <p><opt>seccure encrypt</opt>: Encrypt a message with 
       public key <arg>key</arg>.</p>
 
-      <p><opt>seccure-decrypt</opt>: Prompt for a passphrase
+      <p><opt>seccure decrypt</opt>: Prompt for a passphrase
       and decrypt a 
-      <opt>seccure-encrypt</opt>ed message.</p>
+      <opt>seccure encrypt</opt>ed message.</p>
 
-      <p><opt>seccure-sign</opt>: Prompt for a passphrase and
+      <p><opt>seccure sign</opt>: Prompt for a passphrase and
       digitally sign a message.</p>
 
-      <p><opt>seccure-verify</opt>: Verify signature <arg>sig</arg>
+      <p><opt>seccure verify</opt>: Verify signature <arg>sig</arg>
       with public key <arg>key</arg>.</p>
 
-      <p><opt>seccure-signcrypt</opt>: Sign a message first, encrypt
+      <p><opt>seccure signcrypt</opt>: Sign a message first, encrypt
       it subsequently (in <opt>-b -a</opt> and <opt>-m 0</opt> mode,
       respectively). This is basically a shortcut for two separate
       <opt>seccure</opt> invocations.</p>
 
-      <p><opt>seccure-veridec</opt>: Counterpart to signcryption.
+      <p><opt>seccure veridec</opt>: Counterpart to signcryption.
       </p>
 
-      <p><opt>seccure-dh</opt>: Perform a Diffie-Hellman key
+      <p><opt>seccure dh</opt>: Perform a Diffie-Hellman key
       exchange.</p>
       
 </section>
@@ -149,10 +149,10 @@ Write to <arg>outfile</arg> instead of STDOUT.
       <option><p><opt>-s <arg>sigfile</arg></opt></p>
 <optdesc>
 
-      <p>For <opt>seccure-sign</opt>: Write signature to
+      <p>For <opt>seccure sign</opt>: Write signature to
 <arg>sigfile</arg> instead of STDERR. </p>
 
-<p>For <opt>seccure-verify</opt>: Read signature from
+<p>For <opt>seccure verify</opt>: Read signature from
 <arg>sigfile</arg> instead of using <arg>sig</arg>.
 </p>
 </optdesc>
@@ -174,11 +174,11 @@ Write to <arg>outfile</arg> instead of STDOUT.
 </option>      
       <option><p><opt>-a</opt></p>
 <optdesc>
-      <p>Append mode: </p> <p>For <opt>seccure-sign</opt>: Append
+      <p>Append mode: </p> <p>For <opt>seccure sign</opt>: Append
       signature to the end of the document. This enforces <opt>-f</opt>
       mode.</p>
 
-<p>For <opt>seccure-verify</opt>: Detach signature from
+<p>For <opt>seccure verify</opt>: Detach signature from
 the end of the document.
 </p>
 </optdesc>
@@ -213,34 +213,34 @@ successfully. Any error leads to a nonzero exit code.</p>
 
 <section name="Example">
 <p>Given the passphrase 'seccure is secure', run</p> 
-<p><opt>seccure-key</opt></p> 
+<p><opt>seccure key</opt></p> 
 
 <p>to determine the corresponding public key (which is
 '2@DupCaCKykHBe-QHpAP%d%B[' on curve <arg>p160</arg>).</p>
 
 <p>To encrypt the file 'document.msg' with that key run</p>
 
-<p><opt>seccure-encrypt -i document.msg -o document.enc '2@DupCaCKykHBe-QHpAP%d%B['</opt></p>
+<p><opt>seccure encrypt -i document.msg -o document.enc '2@DupCaCKykHBe-QHpAP%d%B['</opt></p>
 
 <p>The message can be recovered with </p>
 
-<p><opt>seccure-decrypt -i document.enc</opt></p>
+<p><opt>seccure decrypt -i document.enc</opt></p>
 
 <p>To sign the file run</p>
 
-<p><opt>seccure-sign -i document.msg -s document.sig</opt></p>
+<p><opt>seccure sign -i document.msg -s document.sig</opt></p>
 
 <p>and enter the passphrase. The signature is 
 stored in 'document.sig' and can be verified with
 </p>
 
-<p><opt>seccure-verify -i document.msg -s document.sig
+<p><opt>seccure verify -i document.msg -s document.sig
 '2@DupCaCKykHBe-QHpAP%d%B['</opt></p>
 
 </section>
 
 <section name="Key establishment">
-  <opt>seccure-dh</opt> performs an interactive Diffie-Hellman key
+  <opt>seccure dh</opt> performs an interactive Diffie-Hellman key
   exchange. Two instances have to be run in parallel; the token
   generated by the first instance is the input for the second one and vice
   versa. The output consists of two shared keys: it is guaranteed that
